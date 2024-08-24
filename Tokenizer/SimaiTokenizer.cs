@@ -63,6 +63,7 @@ public class SimaiTokenizer : ITokenizer
         string? artistCandidate = "";
         string? chartDesigner = "";
         string? shortIdCandidate = "";
+        string? firstCandidate = "";
         string? genreCandidate = "";
         string? versionCandidate = "";
 
@@ -71,6 +72,11 @@ public class SimaiTokenizer : ITokenizer
             {
                 titleCandidate = item.Replace("title=", "").Replace("[SD]", "").Replace("[DX]", "");
                 simaiTrackInformation.Information["Name"] = titleCandidate;
+            }
+            else if (item.Contains("first"))
+            {
+                firstCandidate = item.Replace("first=", "").Replace("First=", "").Replace("FIRST=", "");
+                simaiTrackInformation.Information["First"] = firstCandidate;
             }
             else if (item.Contains("wholebpm"))
             {

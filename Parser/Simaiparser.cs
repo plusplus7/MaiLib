@@ -17,6 +17,7 @@ public class SimaiParser : IParser
 
     private Tap PreviousSlideStart;
     private BPMChanges bpmChanges;
+    private double? shiftRest;
 
     /// <summary>
     ///     Constructor of simaiparser
@@ -25,11 +26,29 @@ public class SimaiParser : IParser
     {
         PreviousSlideStart = new Tap();
         bpmChanges = new();
+        shiftRest = null;
     }
 
-    public Chart ChartOfToken(string[] tokens)
+    public SimaiParser(double needShift): this()
+    {
+        shiftRest = needShift;
+    }
+
+    public Chart ChartOfToken(string[] input)
         // Note: here chart will only return syntax after &inote_x= and each token is separated by ","
     {
+        string[] tokens;
+        if (shiftRest != null)
+        {
+            tokens = new string[]
+            {
+                $"({shiftRest}){{{1}}}"
+            }.Concat(input).ToArray();
+        }
+        else
+        {
+            tokens = input;
+        }
         List<Note>? notes = new List<Note>();
         // var bpmChanges = new BPMChanges();
         MeasureChanges? measureChanges = new MeasureChanges(4, 4);
